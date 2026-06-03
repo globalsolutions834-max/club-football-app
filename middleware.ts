@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
+  
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -19,18 +20,29 @@ export async function middleware(request: NextRequest) {
       },
     }
   )
+
   const { data: { user } } = await supabase.auth.getUser()
   const { pathname } = request.nextUrl
 
+  // 1. NE PAS intercepter si c'est une route d'authentification interne ou une API
+  if (pathname.startsWith('/auth') || pathname.startsWith('/api')) {
+    return supabaseResponse
+  }
+
+  // 2. Si l'utilisateur N'EST PAS connecté et qu'il n'est pas sur /login -> Redirection /login
   if (!user && pathname !== "/login") {
     return NextResponse.redirect(new URL("/login", request.url))
   }
+
+  // 3. Si l'utilisateur EST connecté et qu'il tente d'aller sur /login -> Redirection /dashboard
   if (user && pathname === "/login") {
     return NextResponse.redirect(new URL("/dashboard", request.url))
   }
+
   return supabaseResponse
 }
 
 export const config = {
+  // Le matcher exclut déjà les fichiers statiques, images et favicon
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 }
