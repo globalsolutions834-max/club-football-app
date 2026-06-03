@@ -16,11 +16,19 @@ export default function LoginPage() {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+    
     const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) { toast.error("Email ou mot de passe incorrect"); setLoading(false); return }
+    
+    if (error) { 
+      toast.error("Email ou mot de passe incorrect")
+      setLoading(false)
+      return 
+    }
+    
     toast.success("Connexion réussie !")
-    router.push("/dashboard")
-    router.refresh()
+    
+    // Correction : Forcer une redirection matérielle propre pour charger les cookies
+    window.location.href = "/dashboard"
   }
 
   return (
