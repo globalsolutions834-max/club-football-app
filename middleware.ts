@@ -46,3 +46,7 @@ export const config = {
   // Le matcher exclut déjà les fichiers statiques, images et favicon
   matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 }
+export const config = {
+  // On met un matcher bidon pour que le middleware ne s'exécute nulle part
+  matcher: ["/route-de-test-temporaire-qui-n-existe-pas"],
+}
