@@ -7,7 +7,9 @@ export async function POST(req: Request) {
   try {
     const { email, password, full_name, role, player_id } = await req.json()
 
-    const cookieStore = cookies()
+    // Correction : Ajout de await car cookies() est asynchrone dans Next.js 15
+    const cookieStore = await cookies()
+    
     const supabaseUser = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

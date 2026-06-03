@@ -7,7 +7,9 @@ export async function DELETE(req: Request) {
   try {
     const { userId } = await req.json()
 
-    const cookieStore = cookies()
+    // Correction : Ajout de await ici aussi
+    const cookieStore = await cookies()
+    
     const supabaseUser = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
