@@ -94,18 +94,22 @@ export default function Sidebar({ profile }: { profile: Profile }) {
           <div className="h-px bg-surface-800" />
         </div>
 
-        {/* Profil */}
+{/* Profil */}
         <div className="px-3 pb-5">
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-surface-900">
             <Image
-              src={avatarUrl(profile.full_name.split(" ")[0] ?? "U", profile.full_name.split(" ")[1] ?? "", profile.avatar_url)}
-              alt={profile.full_name} width={32} height={32}
+              src={avatarUrl(
+                profile?.full_name ? (profile.full_name.split(" ")[0] ?? "U") : "U", 
+                profile?.full_name ? (profile.full_name.split(" ")[1] ?? "") : "", 
+                profile?.avatar_url
+              )}
+              alt={profile?.full_name || "Utilisateur"} width={32} height={32}
               className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-medium truncate">{profile.full_name}</p>
-              <span className={cn("badge text-[10px] mt-0.5", roleColor(profile.role))}>
-                {roleLabel(profile.role)}
+              <p className="text-white text-xs font-medium truncate">{profile?.full_name || "Compte Utilisateur"}</p>
+              <span className={cn("badge text-[10px] mt-0.5", roleColor(profile?.role || "parent"))}>
+                {roleLabel(profile?.role || "parent")}
               </span>
             </div>
             <button onClick={handleLogout} title="Déconnexion"
@@ -114,7 +118,3 @@ export default function Sidebar({ profile }: { profile: Profile }) {
             </button>
           </div>
         </div>
-      </aside>
-    </>
-  )
-}
