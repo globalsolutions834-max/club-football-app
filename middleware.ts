@@ -3,13 +3,15 @@ import { NextResponse, type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request })
-  
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() { return request.cookies.getAll() },
+        getAll() {
+          return request.cookies.getAll()
+        },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
           supabaseResponse = NextResponse.next({ request })
@@ -21,11 +23,14 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   const { pathname } = request.nextUrl
 
-  // 1. NE PAS intercepter si c'est une route d'authentification interne ou une API
-  if (pathname.startsWith('/auth') || pathname.startsWith('/api')) {
+  // 1. Ne pas intercepter les routes d'auth internes et les API
+  if (pathname.startsWith("/auth") || pathname.startsWith("/api")) {
     return supabaseResponse
   }
 
@@ -43,10 +48,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Le matcher exclut déjà les fichiers statiques, images et favicon
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
-}
-export const config = {
-  // On met un matcher bidon pour que le middleware ne s'exécute nulle part
-  matcher: ["/route-de-test-temporaire-qui-n-existe-pas"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 }
