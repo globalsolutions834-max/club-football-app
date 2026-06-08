@@ -38,7 +38,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
 
   return (
     <>
-      {/* Mobile toggle */}
+      {/* Basculement mobile */}
       <button onClick={() => setOpen(true)}
         className="fixed top-4 left-4 z-50 lg:hidden bg-brand-600 text-white p-2 rounded-xl shadow-md">
         <Menu size={20} />
@@ -94,13 +94,13 @@ export default function Sidebar({ profile }: { profile: Profile }) {
           <div className="h-px bg-surface-800" />
         </div>
 
-{/* Profil */}
+        {/* Profil */}
         <div className="px-3 pb-5">
           <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-surface-900">
             <Image
               src={avatarUrl(
-                profile?.full_name ? (profile.full_name.split(" ")[0] ?? "U") : "U", 
-                profile?.full_name ? (profile.full_name.split(" ")[1] ?? "") : "", 
+                profile?.full_name ? (profile.full_name.split(" ")[0] ?? "U") : "U",
+                profile?.full_name ? (profile.full_name.split(" ")[1] ?? "") : "",
                 profile?.avatar_url
               )}
               alt={profile?.full_name || "Utilisateur"} width={32} height={32}
@@ -118,3 +118,7 @@ export default function Sidebar({ profile }: { profile: Profile }) {
             </button>
           </div>
         </div>
+      </aside>
+    </>
+  )
+}
